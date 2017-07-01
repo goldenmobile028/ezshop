@@ -10,19 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609143802) do
+ActiveRecord::Schema.define(version: 20170630193522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "item_favorites", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "item_id"
+    t.boolean  "favorite",   default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["item_id"], name: "index_item_favorites_on_item_id", using: :btree
+    t.index ["user_id"], name: "index_item_favorites_on_user_id", using: :btree
+  end
 
   create_table "items", force: :cascade do |t|
     t.string   "name"
     t.float    "latitude"
     t.float    "longitude"
+    t.float    "latitudeDelta"
+    t.float    "longitudeDelta"
     t.string   "thumbnail"
     t.string   "store_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "store_favorites", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "store_id"
+    t.boolean  "favorite"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_store_favorites_on_store_id", using: :btree
+    t.index ["user_id"], name: "index_store_favorites_on_user_id", using: :btree
   end
 
   create_table "stores", force: :cascade do |t|
@@ -51,4 +73,8 @@ ActiveRecord::Schema.define(version: 20170609143802) do
     t.datetime "updated_at",         null: false
   end
 
+  add_foreign_key "item_favorites", "items"
+  add_foreign_key "item_favorites", "users"
+  add_foreign_key "store_favorites", "stores"
+  add_foreign_key "store_favorites", "users"
 end

@@ -54,12 +54,15 @@ module Endpoints
       #   thumbnail:      String *required
       #   longitude:      Float *required
       #   latitude:       Float *required
+      #   longitudeDelta: Float *required
+      #   latitudeDelta:  Float *required
 
       # results:
       #   return item data
       post :add_item do
         item = Item.new(name: params[:name], store_id: params[:store_id], thumbnail: params[:thumbnail],
-                          longitude: params[:longitude], latitude: params[:latitude])
+                          longitude: params[:longitude], latitude: params[:latitude],
+                          longitudeDelta: params[:longitudeDelta], latitudeDelta: params[:latitudeDelta])
         # item.avatar = params[:thumbnail]
         if item.save()
           # item.avatar.url # => '/url/to/file.png'
@@ -80,13 +83,17 @@ module Endpoints
       #   thumbnail:      String *optional
       #   longitude:      Float *required
       #   latitude:       Float *required
+      #   longitudeDelta: Float *required
+      #   latitudeDelta:  Float *required
 
       # results:
       #   return item data
       post :update_item do
         item = Item.find_by(id: params[:item_id])
         if item.present?
-          item.update_attributes(name: params[:name], longitude: params[:longitude], latitude: params[:latitude])
+          item.update_attributes(name: params[:name], longitude: params[:longitude],
+                                 latitude: params[:latitude], longitudeDelta: params[:longitudeDelta],
+                                 latitudeDelta: params[:latitudeDelta])
           if params[:thumbnail].present?
             item.thumbnail = params[:thumbnail]
             item.save()

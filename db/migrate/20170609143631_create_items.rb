@@ -4,6 +4,8 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.string :name
       t.float :latitude
       t.float :longitude
+      t.float :latitudeDelta
+      t.float :longitudeDelta
       t.string :thumbnail
       t.string :store_id
 
