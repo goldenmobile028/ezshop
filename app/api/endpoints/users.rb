@@ -48,8 +48,6 @@ module Endpoints
           user = User.new(email: params[:email], password: params[:password], user_type: params[:user_type])
           if user.save()
             token = user.generate_token
-            p "------------------"
-            p token
             user.update_attributes(auth_token: user.generate_token)
             p user.auth_token
             {status: 1, data: user.by_json}

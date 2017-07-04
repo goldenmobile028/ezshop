@@ -32,12 +32,13 @@ module Endpoints
       # GET: /api/v1/items/search_items
       # parameters:
       #   store_id:       String *required
+      #   search_key:     String *required
       #   page_number:    Integer *required
 
       # results:
       #   return items list
-      get :get_items do
-        items = Item.where(store_id: params[:store_id])
+      get :search_items do
+        items = Item.where("name LIKE ?", "%#{params[:search_key]}%")
         if items.present?
           {status: 1, data: items.map{|item| item.by_json}}
         else
