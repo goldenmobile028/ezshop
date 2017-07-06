@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
 
-has_one :item_favorite
+has_many :item_favorites
 
   mount_uploader :thumbnail, ImageUploader
 
@@ -8,7 +8,15 @@ has_one :item_favorite
     {itemId: self.id.to_s, storeId: self.store_id, thumb_url: self.thumbnail.url,
      name: self.name, latitude: self.latitude, longitude: self.longitude,
      latitudeDelta: self.latitudeDelta, longitudeDelta: self.longitudeDelta,
-     favorite: self.item_favorite.present? ? self.item_favorite.favorite.to_s : "0"}
+     favorite: "0"}
+  end
+
+  def by_json_user(user_id)
+    item = self.item_favorites.find_by(user_id: user_id)
+    {itemId: self.id.to_s, storeId: self.store_id, thumb_url: self.thumbnail.url,
+     name: self.name, latitude: self.latitude, longitude: self.longitude,
+     latitudeDelta: self.latitudeDelta, longitudeDelta: self.longitudeDelta,
+     favorite: item.present? ? item.favorite.to_s : "0"}
   end
 
 end

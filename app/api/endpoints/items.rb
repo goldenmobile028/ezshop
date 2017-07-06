@@ -32,6 +32,7 @@ module Endpoints
       # GET: /api/v1/items/search_items
       # parameters:
       #   store_id:       String *required
+      #   user_id:        String *required
       #   search_key:     String *required
       #   page_number:    Integer *required
 
@@ -45,7 +46,11 @@ module Endpoints
           items = Item.where("name LIKE ?", "%#{params[:search_key]}%")
         end
         if items.present?
-          {status: 1, data: items.map{|item| item.by_json}}
+          if params[:user_id].present?
+            {status: 1, data: items.map{|item| item.by_json_user(params[:user_id])}}
+          else
+            {status: 1, data: items.map{|item| item.by_json}}
+          end
         else
           {status: 0, data: {error: 'Cann\'t find your items'}}
         end
@@ -67,7 +72,11 @@ module Endpoints
           favorites = favorites.joins(:item).where("items.name LIKE ?", "%#{params[:search_key]}%")
         end
         if favorites.present?
-          {status: 1, data: favorites.map{|item| item.item.by_json}}
+          if params[:user_id].present?
+            {status: 1, data: favorites.map{|item| item.item.by_json_user(params[:user_id])}}
+          else
+            {status: 1, data: favorites.map{|item| item.item.by_json}}
+          end
         else
           {status: 0, data: {error: 'Cann\'t find your items'}}
         end
@@ -144,19 +153,19 @@ module Endpoints
         user = User.find(params[:user_id])
         if user.present?
           params[:item_ids].split(',').each do |item_id|
-            favorite = ItemFavorite.find_by(item_id: item_id)
+            favorite = ItemFavorite.find_by(user_id: params[:user_id], item_id: item_id)
             if favorite.present?
               favorite.update_attributes(favorite: params[:favorite])
             else
               favorite = user.item_favorites.new(item_id: item_id, favorite: params[:favorite])
               if favorite.save()
-
+                p 'Favorited item'
               else
                 return {status: 0, data: {error: favorite.errors.messages}}
               end
             end
           end
-          {status: 1, data: {data: 'Favorited item'}}
+          {status: 1, data: {data: 'Favorited item(s)'}}
         else
           {status: 0, data: {error: 'User does not exist.'}}
         end
