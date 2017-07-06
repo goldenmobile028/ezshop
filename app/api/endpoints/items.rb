@@ -38,7 +38,12 @@ module Endpoints
       # results:
       #   return items list
       get :search_items do
-        items = Item.where("name LIKE ?", "%#{params[:search_key]}%")
+        if params[:store_id].present?
+          items = Item.where(store_id: params[:store_id]).
+                       where("name LIKE ?", "%#{params[:search_key]}%")
+        else
+          items = Item.where("name LIKE ?", "%#{params[:search_key]}%")
+        end
         if items.present?
           {status: 1, data: items.map{|item| item.by_json}}
         else
@@ -46,6 +51,27 @@ module Endpoints
         end
       end
 
+      # Search Favorites
+      # GET: /api/v1/items/search_favorites
+      # parameters:
+      #   user_id:        String *required
+      #   search_key:     String *optional
+      #   page_number:    Integer *required
+
+      # results:
+      #   return items list
+      get :search_favorites do
+        user = User.find(params[:user_id])
+        favorites = user.item_favorites.favorites
+        if params[:search_key].present?
+          favorites = favorites.joins(:item).where("items.name LIKE ?", "%#{params[:search_key]}%")
+        end
+        if favorites.present?
+          {status: 1, data: favorites.map{|item| item.item.by_json}}
+        else
+          {status: 0, data: {error: 'Cann\'t find your items'}}
+        end
+      end
 
       # Add New Item
       # GET: /api/v1/items/add_item
@@ -79,7 +105,7 @@ module Endpoints
       # GET: /api/v1/items/update_item
       # parameters:
       #   name:           String *required
-      #   item_id         String *required
+      #   item_id:        String *required
       #   store_id:       String *required
       #   thumbnail:      String *optional
       #   longitude:      Float *required
@@ -104,6 +130,38 @@ module Endpoints
           {status: 0, data: {error: item.errors.messages}}
         end
       end
+
+      # Favorite Item
+      # GET: /api/v1/items/favorite_item
+      # parameters:
+      #   user_id:        String *required
+      #   item_ids:        String *required
+      #   favorite:       Boolean *required
+
+      # results:
+      #   return item data
+      get :favorite_item do
+        user = User.find(params[:user_id])
+        if user.present?
+          params[:item_ids].split(',').each do |item_id|
+            favorite = ItemFavorite.find_by(item_id: item_id)
+            if favorite.present?
+              favorite.update_attributes(favorite: params[:favorite])
+            else
+              favorite = user.item_favorites.new(item_id: item_id, favorite: params[:favorite])
+              if favorite.save()
+
+              else
+                return {status: 0, data: {error: favorite.errors.messages}}
+              end
+            end
+          end
+          {status: 1, data: {data: 'Favorited item'}}
+        else
+          {status: 0, data: {error: 'User does not exist.'}}
+        end
+      end
+
     end
   end
 end

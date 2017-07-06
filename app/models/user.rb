@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :item_favorites
 
   def by_json
     {userId: self.id.to_s, email: self.email, token: self.auth_token,
