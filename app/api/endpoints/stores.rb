@@ -55,6 +55,32 @@ module Endpoints
           end
         end
       end
+
+      # Update Store
+      # GET: /api/v1/stores/update_store
+      # parameters:
+      #   store_id:       String *required
+      #   name:           String *required
+      #   address:        String *required
+      #   city:           String *required
+      #   zip:            String *required
+      #   longitude:      Float *required
+      #   latitude:       Float *required
+
+      # results:
+      #   return store data
+      get :update_store do
+        store = Store.find(params[:store_id])
+        if store.present?
+          store.update_attributes(name: params[:name], address: params[:address],
+                            city: params[:city], zip: params[:zip], longitude: params[:longitude],
+                            latitude: params[:latitude])
+          {status: 1, data: store.by_json}
+        else
+          {status: 0, data: {error: 'Store does not exist'}}
+        end
+      end
+
     end
   end
 end
