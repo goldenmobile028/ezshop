@@ -19,4 +19,8 @@ class User < ApplicationRecord
     end
   end
 
+  def generate_password
+    return SecureRandom.urlsafe_base64(5)
+  end
+
 end

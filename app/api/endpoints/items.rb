@@ -56,6 +56,7 @@ module Endpoints
         end
       end
 
+
       # Search Favorites
       # GET: /api/v1/items/search_favorites
       # parameters:
@@ -110,8 +111,9 @@ module Endpoints
         end
       end
 
+
       # Update Item
-      # GET: /api/v1/items/update_item
+      # POST: /api/v1/items/update_item
       # parameters:
       #   name:           String *required
       #   item_id:        String *required
@@ -139,6 +141,27 @@ module Endpoints
           {status: 0, data: {error: item.errors.messages}}
         end
       end
+
+
+      # Delete Item
+      # DELETE: /api/v1/items/delete_item
+      # parameters:
+      #   item_id:        String *required
+      #   store_id:       String *required
+      #   user_id:      String *required
+
+      # results:
+      #   return success
+      delete :delete_item do
+        item = Item.find_by(id: params[:item_id])
+        if item.present?
+          item.destroy
+          {status: 1, data: {success: 'Deleted your item'}}
+        else
+          {status: 0, data: {error: 'Cann\'t find your item'}}
+        end
+      end
+
 
       # Favorite Item
       # GET: /api/v1/items/favorite_item
