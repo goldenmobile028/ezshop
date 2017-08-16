@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170630193522) do
+ActiveRecord::Schema.define(version: 20170814153728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "beacons", force: :cascade do |t|
+    t.string   "uuid"
+    t.string   "identifier"
+    t.integer  "major"
+    t.integer  "minor"
+    t.integer  "store_id"
+    t.boolean  "is_enabled"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "item_favorites", force: :cascade do |t|
     t.integer  "user_id"

@@ -7,4 +7,5 @@ class API < Grape::API
   mount Endpoints::Users
   mount Endpoints::Stores
   mount Endpoints::Items
+  mount Endpoints::Beacons
 end

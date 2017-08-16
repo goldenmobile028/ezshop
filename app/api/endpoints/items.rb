@@ -31,7 +31,7 @@ module Endpoints
       # Search Items
       # GET: /api/v1/items/search_items
       # parameters:
-      #   store_id:       String *required
+      #   store_id:       String *optional
       #   user_id:        String *required
       #   search_key:     String *required
       #   page_number:    Integer *required
@@ -97,9 +97,10 @@ module Endpoints
       # results:
       #   return item data
       post :add_item do
-        item = Item.new(name: params[:name], store_id: params[:store_id], thumbnail: params[:thumbnail],
-                          longitude: params[:longitude], latitude: params[:latitude],
-                          longitudeDelta: params[:longitudeDelta], latitudeDelta: params[:latitudeDelta])
+        item = Item.new(name: params[:name], store_id: params[:store_id],
+                        thumbnail: params[:thumbnail], longitude: params[:longitude],
+                        latitude: params[:latitude], longitudeDelta: params[:longitudeDelta],
+                        latitudeDelta: params[:latitudeDelta])
         # item.avatar = params[:thumbnail]
         if item.save()
           # item.avatar.url # => '/url/to/file.png'
