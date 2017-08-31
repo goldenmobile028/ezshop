@@ -93,6 +93,7 @@ module Endpoints
       #   latitude:       Float *required
       #   longitudeDelta: Float *required
       #   latitudeDelta:  Float *required
+      #   location:       String *required
 
       # results:
       #   return item data
@@ -100,7 +101,7 @@ module Endpoints
         item = Item.new(name: params[:name], store_id: params[:store_id],
                         thumbnail: params[:thumbnail], longitude: params[:longitude],
                         latitude: params[:latitude], longitudeDelta: params[:longitudeDelta],
-                        latitudeDelta: params[:latitudeDelta])
+                        latitudeDelta: params[:latitudeDelta], location: params[:location])
         # item.avatar = params[:thumbnail]
         if item.save()
           # item.avatar.url # => '/url/to/file.png'
@@ -124,6 +125,7 @@ module Endpoints
       #   latitude:       Float *required
       #   longitudeDelta: Float *required
       #   latitudeDelta:  Float *required
+      #   location:       String *required
 
       # results:
       #   return item data
@@ -132,7 +134,7 @@ module Endpoints
         if item.present?
           item.update_attributes(name: params[:name], longitude: params[:longitude],
                                  latitude: params[:latitude], longitudeDelta: params[:longitudeDelta],
-                                 latitudeDelta: params[:latitudeDelta])
+                                 latitudeDelta: params[:latitudeDelta], location: params[:location])
           if params[:thumbnail].present?
             item.thumbnail = params[:thumbnail]
             item.save()

@@ -10,12 +10,27 @@ module Endpoints
         { :ping => 'huawan' }
       end
 
+
+      def create_user(email, password, user_type, social)
+        user = User.new(email: email, password: password, user_type: user_type)
+        if user.save()
+          token = user.generate_token
+          user.update_attributes(auth_token: user.generate_token)
+          user.update_attributes(social: social)
+          p user.auth_token
+          {status: 1, data: user.by_json}
+        else
+          {status: 0, data: {error: user.errors.messages}}
+        end
+      end
+
+
       # Signin
       # GET: /api/v1/users/signin
       # parameters:
       #   email:          String *required
       #   password:       String *required
-      #   app_type:        Float *required
+      #   app_type:       Float *required
       #       0:          Consumer App
       #       1:          Store App
 
@@ -32,6 +47,30 @@ module Endpoints
         {status: 0, data: {error: 'Cann\'t find your email'}}
       end
 
+      # Signin with Facebook
+      # GET: /api/v1/users/signin_facebook
+      # parameters:
+      #   email:          String *required
+      #   username:       String *required
+      #   app_type:       Float *required
+      #       0:          Consumer App
+      #       1:          Store App
+
+      # results:
+      #   return user data
+      get :signin_facebook do
+        users = User.where(email: params[:email])
+        password = "fb" + params[:username] + "!"
+        users.each do |user|
+          if user.password == password and user.user_type >= params[:app_type].to_i
+            return {status: 1, data: user.by_json}
+          end
+          return {status: 0, data: {error: 'The user email exists already'}}
+        end
+        Users.create_user(params[:email], password, params[:app_type].to_i, "facebook")
+      end
+
+
       # Signup
       # GET: /api/v1/users/signup
       # parameters:
@@ -46,15 +85,7 @@ module Endpoints
         if user.present?
           {status: 0, data: {error: 'User exists already'}}
         else
-          user = User.new(email: params[:email], password: params[:password], user_type: params[:user_type])
-          if user.save()
-            token = user.generate_token
-            user.update_attributes(auth_token: user.generate_token)
-            p user.auth_token
-            {status: 1, data: user.by_json}
-          else
-            {status: 0, data: {error: user.errors.messages}}
-          end
+          create_user(params[:email], params[:password], params[:user_type].to_i, "")
         end
       end
 

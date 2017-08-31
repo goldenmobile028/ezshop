@@ -8,7 +8,7 @@ has_many :item_favorites
     {itemId: self.id.to_s, storeId: self.store_id, thumb_url: self.thumbnail.url,
      name: self.name, latitude: self.latitude, longitude: self.longitude,
      latitudeDelta: self.latitudeDelta, longitudeDelta: self.longitudeDelta,
-     favorite: "0"}
+     favorite: "0", location: self.location ? self.location : ""}
   end
 
   def by_json_user(user_id)
@@ -16,7 +16,8 @@ has_many :item_favorites
     {itemId: self.id.to_s, storeId: self.store_id, thumb_url: self.thumbnail.url,
      name: self.name, latitude: self.latitude, longitude: self.longitude,
      latitudeDelta: self.latitudeDelta, longitudeDelta: self.longitudeDelta,
-     favorite: item.present? ? item.favorite.to_s : "0"}
+     favorite: item.present? ? item.favorite.to_s : "0",
+     location: self.location ? self.location : ""}
   end
 
 end

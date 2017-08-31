@@ -72,7 +72,8 @@ module Endpoints
       post :add_beacon do
         beacon = Beacon.new(uuid: params[:uuid], store_id: params[:store_id],
                         identifier: params[:identifier], major: params[:major],
-                        minor: params[:minor], name: params[:name])
+                        minor: params[:minor], name: params[:name],
+                        is_enabled: true)
         if beacon.save()
           {status: 1, data: beacon.by_json}
         else
