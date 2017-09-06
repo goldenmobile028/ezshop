@@ -85,7 +85,7 @@ module Endpoints
         if user.present?
           {status: 0, data: {error: 'User exists already'}}
         else
-          create_user(params[:email], params[:password], params[:user_type].to_i, "")
+          Users.create_user(params[:email], params[:password], params[:user_type].to_i, "")
         end
       end
 
