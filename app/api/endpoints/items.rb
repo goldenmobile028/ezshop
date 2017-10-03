@@ -88,7 +88,7 @@ module Endpoints
       # parameters:
       #   name:           String *required
       #   store_id:       String *required
-      #   thumbnail:      String *required
+      #   thumbnail:      String *optional
       #   longitude:      Float *required
       #   latitude:       Float *required
       #   longitudeDelta: Float *required
@@ -99,14 +99,18 @@ module Endpoints
       #   return item data
       post :add_item do
         item = Item.new(name: params[:name], store_id: params[:store_id],
-                        thumbnail: params[:thumbnail], longitude: params[:longitude],
-                        latitude: params[:latitude], longitudeDelta: params[:longitudeDelta],
+                        longitude: params[:longitude], latitude: params[:latitude],
+                        longitudeDelta: params[:longitudeDelta],
                         latitudeDelta: params[:latitudeDelta], location: params[:location])
         # item.avatar = params[:thumbnail]
         if item.save()
           # item.avatar.url # => '/url/to/file.png'
           # item.avatar.current_path # => 'path/to/file.png'
           # item.avatar_identifier # => 'file.png'
+          if params[:thumbnail].present?
+            item.thumbnail = params[:thumbnail]
+            item.save()
+          end
           {status: 1, data: item.by_json}
         else
           {status: 0, data: {error: item.errors.messages}}

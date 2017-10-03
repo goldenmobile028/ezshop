@@ -12,7 +12,7 @@ module Endpoints
 
 
       def create_user(email, password, user_type, social)
-        user = User.new(email: email, password: password, user_type: user_type)
+        user = User.new(email: email.downcase, password: password, user_type: user_type)
         if user.save()
           token = user.generate_token
           user.update_attributes(auth_token: user.generate_token)
@@ -37,7 +37,7 @@ module Endpoints
       # results:
       #   return user data
       get :signin do
-        users = User.where(email: params[:email])
+        users = User.where(email: params[:email].downcase)
         users.each do |user|
           if user.password == params[:password] and user.user_type >= params[:app_type].to_i
             return {status: 1, data: user.by_json}
@@ -59,7 +59,7 @@ module Endpoints
       # results:
       #   return user data
       get :signin_facebook do
-        users = User.where(email: params[:email])
+        users = User.where(email: params[:email].downcase)
         password = "fb" + params[:username] + "!"
         users.each do |user|
           if user.password == password and user.user_type >= params[:app_type].to_i
@@ -67,7 +67,7 @@ module Endpoints
           end
           return {status: 0, data: {error: 'The user email exists already'}}
         end
-        Users.create_user(params[:email], password, params[:app_type].to_i, "facebook")
+        Users.create_user(params[:email].downcase, password, params[:app_type].to_i, "facebook")
       end
 
 
@@ -81,11 +81,11 @@ module Endpoints
       # results:
       #   return user data
       get :signup do
-        user = User.find_by(email: params[:email])
+        user = User.find_by(email: params[:email].downcase)
         if user.present?
           {status: 0, data: {error: 'User exists already'}}
         else
-          Users.create_user(params[:email], params[:password], params[:user_type].to_i, "")
+          Users.create_user(params[:email].downcase, params[:password], params[:user_type].to_i, "")
         end
       end
 
@@ -99,7 +99,7 @@ module Endpoints
       # results:
       #   return status
       post :reset_password do
-        user = User.find_by(email: params[:email])
+        user = User.find_by(email: params[:email].downcase)
         if user.present?
           password = user.generate_password
           user.update_attributes(password: user.generate_password)
@@ -123,7 +123,7 @@ module Endpoints
       # results:
       #   return status
       get :change_password do
-        users = User.where(email: params[:email])
+        users = User.where(email: params[:email].downcase)
         users.each do |user|
           if user.password == params[:old_password]
             user.update_attributes(password: params[:new_password])
