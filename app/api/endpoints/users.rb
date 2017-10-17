@@ -42,7 +42,7 @@ module Endpoints
           if user.password == params[:password] and user.user_type >= params[:app_type].to_i
             return {status: 1, data: user.by_json}
           end
-          {status: 0, data: {error: 'Password doesn\'t match'}}
+          return {status: 0, data: {error: 'Password doesn\'t match'}}
         end
         {status: 0, data: {error: 'Cann\'t find your email'}}
       end
