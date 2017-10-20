@@ -44,7 +44,7 @@ module Endpoints
           end
           return {status: 0, data: {error: 'Password doesn\'t match'}}
         end
-        {status: 0, data: {error: 'Cann\'t find your email'}}
+        {status: 0, data: {error: 'Can\'t find your email'}}
       end
 
       # Signin with Facebook
@@ -130,7 +130,7 @@ module Endpoints
             return {status: 1, data: user.by_json}
           end
         end
-        {status: 0, data: {error: 'Cann\'t find your email'}}
+        {status: 0, data: {error: 'Can\'t find your email'}}
       end
 
     end

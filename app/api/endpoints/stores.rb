@@ -22,7 +22,7 @@ module Endpoints
         if store.present?
           {status: 1, data: store.by_json}
         else
-          {status: 0, data: {error: 'Cann\'t find your store'}}
+          {status: 0, data: {error: 'Can\'t find your store'}}
         end
       end
 

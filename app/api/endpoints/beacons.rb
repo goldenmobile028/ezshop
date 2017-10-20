@@ -23,7 +23,7 @@ module Endpoints
         if beacons.present?
           {status: 1, data: beacons.map{|beacon| beacon.by_json}}
         else
-          {status: 0, data: {error: 'Cann\'t find your beacons'}}
+          {status: 0, data: {error: 'Can\'t find your beacons'}}
         end
       end
 
@@ -52,7 +52,7 @@ module Endpoints
             {status: 1, data: beacons.map{|beacon| beacon.by_json}}
           end
         else
-          {status: 0, data: {error: 'Cann\'t find your beacons'}}
+          {status: 0, data: {error: 'Can\'t find your beacons'}}
         end
       end
 
@@ -123,7 +123,7 @@ module Endpoints
           beacon.destroy
           {status: 1, data: {success: 'Deleted your beacon'}}
         else
-          {status: 0, data: {error: 'Cann\'t find your beacon'}}
+          {status: 0, data: {error: 'Can\'t find your beacon'}}
         end
       end
 
@@ -143,7 +143,7 @@ module Endpoints
           beacon.update_attributes(is_enabled: params[:is_enabled])
           {status: 1, data: {success: beacon.by_json}}
         else
-          {status: 0, data: {error: 'Cann\'t find your beacon'}}
+          {status: 0, data: {error: 'Can\'t find your beacon'}}
         end
       end
 
@@ -163,7 +163,7 @@ module Endpoints
           beacon.update_attributes(is_enabled: params[:is_enabled])
           {status: 1, data: {success: beacon.by_json}}
         else
-          {status: 0, data: {error: 'Cann\'t find your beacon'}}
+          {status: 0, data: {error: 'Can\'t find your beacon'}}
         end
       end
 

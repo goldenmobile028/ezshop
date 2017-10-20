@@ -24,7 +24,7 @@ module Endpoints
         if items.present?
           {status: 1, data: items.map{|item| item.by_json}}
         else
-          {status: 0, data: {error: 'Cann\'t find your items'}}
+          {status: 0, data: {error: 'Can\'t find your items'}}
         end
       end
 
@@ -52,7 +52,7 @@ module Endpoints
             {status: 1, data: items.map{|item| item.by_json}}
           end
         else
-          {status: 0, data: {error: 'Cann\'t find your items'}}
+          {status: 0, data: {error: 'Can\'t find your items'}}
         end
       end
 
@@ -79,7 +79,7 @@ module Endpoints
             {status: 1, data: favorites.map{|item| item.item.by_json}}
           end
         else
-          {status: 0, data: {error: 'Cann\'t find your items'}}
+          {status: 0, data: {error: 'Can\'t find your items'}}
         end
       end
 
@@ -165,7 +165,7 @@ module Endpoints
           item.destroy
           {status: 1, data: {success: 'Deleted your item'}}
         else
-          {status: 0, data: {error: 'Cann\'t find your item'}}
+          {status: 0, data: {error: 'Can\'t find your item'}}
         end
       end
 
