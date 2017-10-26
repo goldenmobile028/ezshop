@@ -62,9 +62,9 @@ module Endpoints
         users = User.where(email: params[:email].downcase)
         password = "fb" + params[:username] + "!"
         users.each do |user|
-          if user.password == password and user.user_type >= params[:app_type].to_i
+          # if user.password == password and user.user_type >= params[:app_type].to_i
             return {status: 1, data: user.by_json}
-          end
+          # end
           return {status: 0, data: {error: 'The user email exists already'}}
         end
         Users.create_user(params[:email].downcase, password, params[:app_type].to_i, "facebook")
