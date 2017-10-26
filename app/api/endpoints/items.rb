@@ -41,9 +41,9 @@ module Endpoints
       get :search_items do
         if params[:store_id].present?
           items = Item.where(store_id: params[:store_id]).
-                       where("name.downcase LIKE ?", "%#{params[:search_key].downcase}%")
+                       where("lower(name) LIKE ?", "%#{params[:search_key].downcase}%")
         else
-          items = Item.where("name.downcase LIKE ?", "%#{params[:search_key].downcase}%")
+          items = Item.where("lower(name) LIKE ?", "%#{params[:search_key].downcase}%")
         end
         if items.present?
           if params[:user_id].present?
@@ -70,7 +70,7 @@ module Endpoints
         user = User.find(params[:user_id])
         favorites = user.item_favorites.favorites
         if params[:search_key].present?
-          favorites = favorites.joins(:item).where("items.name.downcase LIKE ?", "%#{params[:search_key].downcase}%")
+          favorites = favorites.joins(:item).where("lower(items.name) LIKE ?", "%#{params[:search_key].downcase}%")
         end
         if favorites.present?
           if params[:user_id].present?
