@@ -128,6 +128,8 @@ module Endpoints
           if user.password == params[:old_password]
             user.update_attributes(password: params[:new_password])
             return {status: 1, data: user.by_json}
+          else
+            return {status: 0, data: {error: 'Current password is incorrect.'}}
           end
         end
         {status: 0, data: {error: 'Can\'t find your email'}}
