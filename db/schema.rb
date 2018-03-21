@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829152110) do
+ActiveRecord::Schema.define(version: 20180321081526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,8 +23,11 @@ ActiveRecord::Schema.define(version: 20170829152110) do
     t.integer  "store_id"
     t.boolean  "is_enabled"
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.float    "xpos"
+    t.float    "ypos"
+    t.boolean  "is_boundary"
   end
 
   create_table "item_favorites", force: :cascade do |t|
@@ -48,6 +51,7 @@ ActiveRecord::Schema.define(version: 20170829152110) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.string   "location"
+    t.string   "beacon_id"
   end
 
   create_table "store_favorites", force: :cascade do |t|

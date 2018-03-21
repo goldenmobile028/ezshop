@@ -58,7 +58,7 @@ module Endpoints
 
 
       # Add New Beacon
-      # GET: /api/v1/beacons/add_beacon
+      # POST: /api/v1/beacons/add_beacon
       # parameters:
       #   uuid:           String *required
       #   name:           String *required
@@ -66,6 +66,9 @@ module Endpoints
       #   identifier:     String *required
       #   major:          Integer *required
       #   minor:          Integer *required
+      #   xpos:           Float *required
+      #   ypos:           Float *required
+      #   is_boundary:    Boolean *required
 
       # results:
       #   return beacon data
@@ -73,8 +76,26 @@ module Endpoints
         beacon = Beacon.new(uuid: params[:uuid], store_id: params[:store_id],
                         identifier: params[:identifier], major: params[:major],
                         minor: params[:minor], name: params[:name],
-                        is_enabled: true)
+                        is_enabled: true, xpos: params[:xpos],
+                        ypos: params[:ypos], is_boundary: params[:is_boundary])
         if beacon.save()
+          {status: 1, data: beacon.by_json}
+        else
+          {status: 0, data: {error: beacon.errors.messages}}
+        end
+      end
+
+
+      # Get Beacon Details
+      # GET: /api/v1/beacons/get_beacon
+      # parameters:
+      #   beacon_id:       String *required
+
+      # results:
+      #   return beacon data
+      get :get_beacon do
+        beacon = Beacon.find_by(id: params[:beacon_id])
+        if beacon.present?
           {status: 1, data: beacon.by_json}
         else
           {status: 0, data: {error: beacon.errors.messages}}
@@ -92,6 +113,9 @@ module Endpoints
       #   identifier:     String *required
       #   major:          Integer *required
       #   minor:          Integer *required
+      #   xpos:           Float *required
+      #   ypos:           Float *required
+      #   is_boundary:    Boolean *required
 
       # results:
       #   return beacon data
@@ -100,7 +124,8 @@ module Endpoints
         if beacon.present?
           beacon.update_attributes(name: params[:name], uuid: params[:uuid],
                   identifier: params[:identifier], major: params[:major],
-                  minor: params[:minor])
+                  minor: params[:minor], xpos: params[:xpos],
+                  ypos: params[:ypos], is_boundary: params[:is_boundary])
           {status: 1, data: beacon.by_json}
         else
           {status: 0, data: {error: beacon.errors.messages}}

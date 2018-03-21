@@ -9,7 +9,8 @@ has_many :item_favorites
      thumb_url: self.thumbnail.url ? self.thumbnail.url : "",
      name: self.name, latitude: self.latitude, longitude: self.longitude,
      latitudeDelta: self.latitudeDelta, longitudeDelta: self.longitudeDelta,
-     favorite: false, location: self.location ? self.location : ""}
+     favorite: false, location: self.location ? self.location : "",
+     beacon_id: self.beacon_id.nil? ? "" : self.beacon_id}
   end
 
   def by_json_user(user_id)
@@ -19,7 +20,8 @@ has_many :item_favorites
      name: self.name, latitude: self.latitude, longitude: self.longitude,
      latitudeDelta: self.latitudeDelta, longitudeDelta: self.longitudeDelta,
      favorite: item.present? ? item.favorite : false,
-     location: self.location ? self.location : ""}
+     location: self.location ? self.location : "",
+     beacon_id: self.beacon_id ? self.beacon_id : ""}
   end
 
 end
